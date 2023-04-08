@@ -34,7 +34,7 @@ class Login extends CI_Controller
       if ($cek->num_rows() > 0) {
          $hasil = $cek->row();
          if (password_verify($pass, $hasil->password)) {
-            $this->session->set_userdata('id', $hasil->id_user);
+            $this->session->set_userdata('id', $hasil->id);
             $this->session->set_userdata('name', $hasil->name);
             $this->session->set_userdata('username', $hasil->username);
             $this->session->set_userdata('image', $hasil->image);

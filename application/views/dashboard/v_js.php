@@ -143,7 +143,7 @@
 
    <?php if ($this->session->flashdata('loginok')) : ?> {
          $(document).Toasts('create', {
-            class: 'bg-success',
+            class: 'bg-info',
             title: 'Welcome',
             body: '<?= ucwords($this->session->flashdata('loginok')) ?>'
          })
@@ -159,6 +159,14 @@
          input.attr("type", "password");
       }
    });
+
+   $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+      localStorage.setItem('activeTab', $(e.target).attr('href'));
+   });
+   var activeTab = localStorage.getItem('activeTab');
+   if (activeTab) {
+      $('#myTab a[href="' + activeTab + '"]').tab('show');
+   }
 
    function gethclock() {
       const d = new Date();

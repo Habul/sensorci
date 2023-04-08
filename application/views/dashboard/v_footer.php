@@ -45,7 +45,6 @@
 <script src="<?= base_url('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') ?>"></script>
 <script src="<?= base_url('assets/dist/js/adminlte.min.js') ?>"></script>
 <?php $this->load->view('dashboard/v_js') ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script>
 	$(document).ready(function() {
 		setInterval(function() {

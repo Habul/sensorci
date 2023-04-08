@@ -147,4 +147,124 @@ class Dashboard extends CI_Controller
       $this->session->set_flashdata('berhasil', 'Berhasil hapus user ' . ucwords($nama) . ' !');
       redirect(base_url('dashboard/user'));
    }
+
+   public function profile()
+   {
+
+      $where =
+         [
+            'id' => $this->session->userdata('id')
+         ];
+
+      $data['title'] = 'Profile';
+      $data['profile'] = $this->m_data->edit_data($where, 'users')->result();
+
+      $this->load->view('dashboard/v_header', $data);
+      $this->load->view('dashboard/v_profile', $data);
+      $this->load->view('dashboard/v_footer');
+   }
+
+   public function profile_update()
+   {
+      $this->form_validation->set_rules('name', 'Name', 'required');
+      $this->form_validation->set_rules('username', 'Username', 'required');
+
+      if ($this->form_validation->run() != false) {
+
+         $id = $this->session->userdata('id');
+         $name = $this->input->post('name');
+         $username = $this->input->post('username');
+
+         $data =
+            [
+               'name' => $name,
+               'username' => $username
+            ];
+
+         $this->m_data->update_data(['id' => $id], $data, 'users');
+         $this->session->set_flashdata('berhasil', 'Update Profile ' . $name . ' successfully !');
+
+         if (!empty($_FILES['images']['name'])) {
+            $config['upload_path']   = './assets/img/';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config['overwrite']     = true;
+            $config['max_size']      = 1024;
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('images')) {
+               $gambar = $this->upload->data();
+
+               $image = $gambar['file_name'];
+
+               $data =
+                  [
+                     'image' => $image
+                  ];
+
+               $where =
+                  [
+                     'id' => $this->session->userdata('id')
+                  ];
+
+               $this->m_data->update_data($where, $data, 'users');
+               $this->session->set_flashdata('berhasil', 'Update Image Profile ' . $name . ' successfully !');
+            }
+         }
+         redirect(base_url('dashboard/profile'));
+      } else {
+
+         $where =
+            [
+               'id' => $this->session->userdata('id')
+            ];
+
+         $data['profile'] = $this->m_data->edit_data($where, 'users')->result();
+         $this->session->set_flashdata('ulang', 'Profile failed to update, Please repeat !');
+         $this->load->view('dashboard/v_header');
+         $this->load->view('dashboard/v_profile', $data);
+         $this->load->view('dashboard/v_footer');
+      }
+   }
+
+   public function change_password()
+   {
+      $this->form_validation->set_rules('password_lama', 'Password Lama', 'required');
+      $this->form_validation->set_rules('password_baru', 'Password Baru', 'required|min_length[6]', 'required|matches[password_lama]');
+      $this->form_validation->set_rules('konfirmasi_password', 'Konfirmasi Password Baru', 'required|matches[password_baru]');
+
+      if ($this->form_validation->run() != false) {
+
+         $password_lama = $this->input->post('password_lama');
+         $password_baru = $this->input->post('password_baru');
+         $konfirmasi_password = $this->input->post('konfirmasi_password');
+
+         $where = array(
+            'id' => $this->session->userdata('id')
+         );
+
+         $cek = $this->m_data->cek_login('users', $where);
+
+         if ($cek->num_rows() > 0) {
+            $hasil = $cek->row();
+            if (password_verify($password_lama, $hasil->password)) {
+               $w = array(
+                  'id' => $this->session->userdata('id')
+               );
+               $data = array(
+                  'password' => password_hash($password_baru, PASSWORD_DEFAULT)
+               );
+               $this->m_data->update_data($where, $data, 'users');
+               $this->session->set_flashdata('berhasil', 'Update password successfully !');
+               redirect('dashboard/profile');
+            } else {
+               $this->session->set_flashdata('gagal', 'Password does not match !');
+               redirect('dashboard/profile');
+            }
+         }
+      } else {
+         $this->session->set_flashdata('ulang', 'Password must be 6 digits or password not match!');
+         redirect('dashboard/profile');
+      }
+   }
 }

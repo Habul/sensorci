@@ -21,7 +21,7 @@
 <body class="hold-transition layout-top-nav">
 	<div class="wrapper">
 
-		<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+		<nav class="main-header navbar navbar-expand-md navbar-light navbar-white shadow-sm">
 			<div class="container">
 				<a href="#" class="navbar-brand">
 					<img src="<?= base_url('assets/img/unpam.png') ?>" alt="Indomaret" class="brand-image " style="opacity: .8">
@@ -58,7 +58,7 @@
 						<span class="nav-link" id='hclock'><?php mdate('%Y-%m-%d %H:%i:%s') ?></span>
 						</a>
 					</li>
-					<li class="nav-item dropdown user-menu ">
+					<li class="nav-item dropdown user-menu <?= $this->uri->uri_string() == 'dashboard/profile'	? 'active' : '' ?>">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
 							<img src="<?= base_url('assets/img/') . $this->session->userdata('image'); ?>" class="user-image img-circle elevation-2" alt="User Image">
 							<span class="d-none d-md-inline"><?= ucwords($this->session->userdata('username')) ?>&nbsp;<i class="fas fa-angle-down right"></i>
@@ -66,12 +66,12 @@
 						<ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 							<li class="user-header">
 								<img src="<?= base_url('assets/img/') . $this->session->userdata('image'); ?>" class="img-circle elevation-2" alt="User Image">
-								<p>
+								<p class="text-muted">
 									<?= ucwords($this->session->userdata('name'))  ?>
 								</p>
 							</li>
 							<li class="user-footer">
-								<a href="<?= base_url('dashboard/profil') ?>" class="btn btn-default border-0" title="Profile"><i class="fas fa-user-tie"></i> Profile</a>
+								<a href="<?= base_url('dashboard/profile') ?>" class="btn btn-default border-0" title="Profile"><i class="fas fa-user-tie"></i> Profile</a>
 								<a data-toggle="modal" data-target="#modal-logout" class="btn btn-default float-right border-0" title="Sign out"><i class="fas fa-sign-out-alt"></i> Logout</a>
 							</li>
 						</ul>
