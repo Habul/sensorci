@@ -1,0 +1,23 @@
+.login,
+.image {
+	min-height: 100vh;
+}
+
+.bg-image {
+	background-image: url('http://localhost:8080/sensorci/assets/img/iotneww.png');
+	/* background-image: url('https://bootstrapious.com/i/snippets/sn-page-split/bg.jpgk'); */
+	background-size: cover;
+	background-position: center center;
+}
+
+@media screen and (min-width: 601px) {
+	.display-4 {
+		font-size: 40px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.display-4 {
+		font-size: 40px;
+	}
+}
