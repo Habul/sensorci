@@ -30,9 +30,8 @@ class Dashboard extends CI_Controller
 
    public function user()
    {
-      $data['title'] = 'Master User';
-      $data['users'] = $this->m_data->users()->result();
-      $data['level'] = $this->m_data->get_data('user_level')->result();
+      $data['title'] = 'Users';
+      $data['users'] = $this->m_data->get_data('users')->result();
       $this->load->view('dashboard/v_header', $data);
       $this->load->view('dashboard/v_user', $data);
       $this->load->view('dashboard/v_footer', $data);
@@ -40,51 +39,48 @@ class Dashboard extends CI_Controller
 
    public function add_user()
    {
-      $this->form_validation->set_rules('nama', 'Nama', 'required|trim|is_unique[users.nama]');
+      $this->form_validation->set_rules('nama', 'Nama', 'required|trim|is_unique[users.name]');
       $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[users.username]');
-      $this->form_validation->set_rules('no_hp', 'No HP', 'required|trim');
       $this->form_validation->set_rules('password', 'Password', 'required');
-      $this->form_validation->set_rules('level', 'Level', 'required');
-      $this->form_validation->set_rules('alamat', 'Alamat', 'required');
 
       if ($this->form_validation->run() != false) {
-         $nama = $this->input->post('nama');
+         $name = $this->input->post('name');
          $username = $this->input->post('username');
-         $no_hp = $this->input->post('no_hp');
          $password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
-         $level = $this->input->post('level');
-         $alamat = $this->input->post('alamat');
-
-         if (strlen($nama) > 4) {
-            $initial = str_split($nama);
-            $split = $initial[0] . $initial[2] . $initial[4];
-         } else {
-            $initial = str_split($nama);
-            $split = $initial[0] . $initial[2] . $initial[3];
-         }
 
          $data =
             [
-               'nama' => $nama,
+               'name' => $name,
                'username' => $username,
                'password' => $password,
-               'no_hp' => $no_hp,
-               'alamat' => $alamat,
-               'id_level' => $level,
                'created_at' => date('Y-m-d H:i:s')
             ];
 
-         if ($level == '3') {
-            $this->m_data->insert_data(['nama_mgr' => $split, 'id_level' => $level], 'mgr');
-         } elseif ($level == '2') {
-            $this->m_data->insert_data(['nama_spv' => $split, 'id_level' => $level], 'spv');
-         }
-
          $this->m_data->insert_data($data, 'users');
-         $this->session->set_flashdata('berhasil', 'Berhasil tambahkan user ' . ucwords($nama) . ' !');
+
+         if (!empty($_FILES['foto']['name'])) {
+
+            $config['upload_path']   = './assets/img/';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config['overwrite']  = true;
+            $config['max_size']     = 1024;
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('foto')) {
+               $gambar = $this->upload->data();
+
+               $id = $this->input->post('id');
+               $file = $gambar['file_name'];
+
+               // $this->db->query("UPDATE type_vehicles SET foto='$file' WHERE no_id='$id'");
+               $this->m_data->update_data($where, $data, 'users');
+            }
+         }
+         $this->session->set_flashdata('berhasil', 'Successfully added user ' . ucwords($name) . ' !');
          redirect(base_url('dashboard/user'));
       } else {
-         $this->session->set_flashdata('gagal', 'Gagal tambahkan data !');
+         $this->session->set_flashdata('gagal', 'Failed to add data !');
          redirect(base_url('dashboard/user'));
       }
    }
