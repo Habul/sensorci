@@ -45,7 +45,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="<?= base_url('event/report'); ?>" <?= $this->uri->uri_string() == 'event/report' || $this->uri->uri_string() == 'event/reports' ? 'class="nav-link active"' : 'class="nav-link"' ?>>
+							<a href="<?= base_url('dashboard/report'); ?>" <?= $this->uri->uri_string() == 'dashboard/report' ? 'class="nav-link active"' : 'class="nav-link"' ?>>
 								<i class="fas fa-file-invoice"></i>
 								Report
 							</a>
@@ -58,7 +58,7 @@
 						<span class="nav-link" id='hclock'><?php mdate('%Y-%m-%d %H:%i:%s') ?></span>
 						</a>
 					</li>
-					<li class="nav-item dropdown user-menu <?= $this->uri->uri_string() == 'dashboard/profile'	? 'active' : '' ?>">
+					<li class="nav-item dropdown user-menu <?= $this->uri->uri_string() == 'dashboard/profile' ? 'active' : '' ?>">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
 							<img src="<?= base_url('assets/img/') . $this->session->userdata('image'); ?>" class="user-image img-circle elevation-2" alt="User Image">
 							<span class="d-none d-md-inline"><?= ucwords($this->session->userdata('username')) ?>&nbsp;<i class="fas fa-angle-down right"></i>

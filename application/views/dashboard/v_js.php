@@ -1,47 +1,5 @@
 <script>
    $(function() {
-      $("#example1").DataTable({
-         "responsive": true,
-         "lengthChange": false,
-         "autoWidth": false,
-         "searching": false,
-         "order": [],
-         "paging": false,
-         "info": false,
-      });
-      $('#example2').DataTable({
-         "paging": true,
-         "lengthChange": true,
-         "searching": true,
-         "ordering": true,
-         "info": true,
-         "autoWidth": false,
-         "responsive": true,
-      });
-      $("#example3").DataTable({
-         "responsive": true,
-         "lengthChange": false,
-         "autoWidth": false,
-         "searching": false,
-         "ordering": false,
-         "paging": false,
-         "info": false,
-         "buttons": ['copyHtml5',
-            {
-               extend: 'excelHtml5',
-               filename: 'Data',
-               title: 'Result Event JSM',
-               footer: true,
-               exportOptions: {
-                  columns: [0, 1],
-                  orthogonal: 'export'
-               },
-            }, "csv", "pdf"
-         ],
-      }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
-   });
-
-   $(function() {
       bsCustomFileInput.init();
    });
 
@@ -179,44 +137,4 @@
       setTimeout(gethclock, 1000);
    }
    gethclock();
-</script>
-<script>
-   var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-
-   var lineChartData = {
-      labels: ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-      datasets: <?= str_replace('"', "'", $data_event);  ?>
-   }
-
-   var lineChartOptions = {
-      maintainAspectRatio: false,
-      responsive: true,
-      legend: {
-         display: true
-      },
-      scales: {
-         xAxes: [{
-            gridLines: {
-               display: false,
-            }
-         }],
-         yAxes: [{
-            gridLines: {
-               display: false,
-            }
-         }]
-      }
-   }
-
-   var lineChart = new Chart(lineChartCanvas, {
-      type: 'line',
-      data: lineChartData,
-      options: lineChartOptions
-   })
-
-   new Chart(areaChartCanvas, {
-      type: 'line',
-      data: areaChartData,
-      options: areaChartOptions
-   })
 </script>

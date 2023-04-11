@@ -20,8 +20,6 @@
 					Menampilkan Nilai Sensor Secara Realtime<br>
 					Pada <b style="color: #26b49a;">Lab Kalibrasi</b>
 				</h2>
-				<!-- <a href="<?= base_url('laporan') ?>" class="btn btn-warning" type="button"><b>Laporan</b></a> -->
-
 				<div class="row" style="display: flex; justify-content: center;">
 					<div class="col-md-6">
 						<div class="card text-center" style="margin-top: 20px;">

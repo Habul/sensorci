@@ -19,9 +19,9 @@
       <div class="container">
          <div class="row">
             <div class="col-md-12">
-               <div class="card">
+               <div class="card card-info card-outline">
                   <div class="card-header">
-                     <h4 class="card-title"><a class="btn btn-success col-15 shadow-sm" data-toggle="modal" data-target="#modal_add">
+                     <h4 class="card-title"><a class="btn btn-info col-15 shadow-sm" data-toggle="modal" data-target="#modal_add">
                            <i class="fa fa-plus"></i>&nbsp; Add User</a>
                      </h4>
                      <div class="card-tools">
@@ -55,19 +55,22 @@
                               <td class="align-middle "><?= $u->username ?></td>
                               <td class="align-middle text-center"><img width="50%" class="img-responsive" src="<?= base_url('assets/img/') . $u->image; ?>"></td>
                               <td class="align-middle text-center">
-                                 <?php
-                                 if ($u->status == "1") {
-                                    echo "<span class='badge badge-success'>Aktif</span>";
-                                 } else {
-                                    echo "<span class='badge badge-danger'>Non-Aktif</span>";
-                                 }
-                                 ?>
+                                 <?php if ($u->status == "1") : ?>
+                                    <span class='badge badge-success'>Aktif</span>
+                                 <?php else : ?>
+                                    <span class='badge badge-danger'>Non-Aktif</span>
+                                 <?php endif ?>                                 
                               </td>
                               <td class="align-middle text-center">
+                                 <?php if ($this->session->userdata('id') != $u->id) : ?>
                                  <a class="btn btn-warning" data-toggle="modal" data-target="#modal_edit<?= $u->id; ?>" title="Edit">
                                     <i class="fa fa-pencil-alt"></i></a>
                                  <a class="btn btn-danger" data-toggle="modal" data-target="#modal_hapus<?= $u->id; ?>" title="Delete">
                                     <i class="fa fa-trash"></i></a>
+                                 <?php else : ?>
+                                    <button class="btn btn-danger" disabled title="Lock">
+                                    <i class="fa fa-lock"></i></button>
+                                 <?php endif ?>
                               </td>
                            </tr>
                         <?php } ?>
@@ -92,7 +95,7 @@
                </button>
             </h4>
          </div>
-         <form method="post" onsubmit="addbtn.disabled = true; return true;" action="<?= base_url('dashboard/add_user') ?>">
+         <form method="post" onsubmit="addbtn.disabled = true; return true;" action="<?= base_url('dashboard/add_user') ?>" enctype="multipart/form-data">
             <div class="card-body">
                <div class="form-group">
                   <div class="input-group">
@@ -101,7 +104,7 @@
                            <span><i class="fas fa-user-tie"></i>&nbsp;&nbsp;</span>
                         </div>
                      </div>
-                     <input type="text" name="nama" class="form-control" placeholder="Input nama .." required>
+                     <input type="text" name="name" class="form-control" placeholder="Input nama .." required>
                   </div>
                </div>
                <div class="form-group">
@@ -125,7 +128,7 @@
                   </div>
                </div>
                <div class="form-group mb-0">
-                  <div class="custom-file">
+                  <div class="custom-file mb-0">
                      <input type="file" class="custom-file-input" id="image" name="foto" onchange="priviewImage()">
                      <label class="custom-file-label" for="image">Upload Image..</label>
                      <?php echo set_value('foto'); ?>
@@ -142,9 +145,9 @@
 </div>
 <!--End Modals Add-->
 
-<!-- Bootstrap modal edit & delete
+<!-- Bootstrap modal edit & delete -->
 <?php foreach ($users as $u) : ?>
-   <div class="modal fade" id="modal_edit<?= $u->id_user ?>" tabindex="-1" data-backdrop="static">
+   <div class="modal fade" id="modal_edit<?= $u->id ?>" tabindex="-1" data-backdrop="static">
       <div class="modal-dialog modal-dialog-centered">
          <div class="modal-content bg-light color-palette">
             <div class="modal-header">
@@ -154,7 +157,7 @@
                   </button>
                </h4>
             </div>
-            <form method="post" onsubmit="editbtn.disabled = true; return true;" action="<?= base_url('dashboard/edit_user') ?>">
+            <form method="post" onsubmit="editbtn.disabled = true; return true;" action="<?= base_url('dashboard/edit_user') ?>" enctype="multipart/form-data">
                <div class="card-body">
                   <div class="form-group">
                      <div class="input-group">
@@ -163,8 +166,8 @@
                               <span><i class="fas fa-user-tie"></i>&nbsp;&nbsp;</span>
                            </div>
                         </div>
-                        <input type="hidden" name="id" value="<?= $u->id_user ?>">
-                        <input type="text" name="nama" class="form-control" value="<?= $u->nama ?>" required>
+                        <input type="hidden" name="id" value="<?= $u->id ?>">
+                        <input type="text" name="name" class="form-control" value="<?= $u->name ?>" required>
                      </div>
                   </div>
                   <div class="form-group">
@@ -175,16 +178,6 @@
                            </div>
                         </div>
                         <input type="text" name="username" class="form-control" value="<?= $u->username ?>" required>
-                     </div>
-                  </div>
-                  <div class="form-group">
-                     <div class="input-group">
-                        <div class="input-group-prepend">
-                           <div class="input-group-text">
-                              <span><i class="fas fa-phone"></i>&nbsp;&nbsp;</span>
-                           </div>
-                        </div>
-                        <input type="text" name="no_hp" class="form-control" value="<?= $u->no_hp ?>" required>
                      </div>
                   </div>
                   <div class=" form-group">
@@ -198,29 +191,11 @@
                      </div>
                      <small>Kosongkan jika tidak ingin mengubah password</small>
                   </div>
-                  <div class="form-group">
-                     <div class="input-group">
-                        <div class="input-group-prepend">
-                           <div class="input-group-text">
-                              <span><i class="fas fa-suitcase"></i>&nbsp;&nbsp;</span>
-                           </div>
-                        </div>
-                        <select class="form-control" name="level" required>
-                           <option value="">- Pilih level -</option>
-                           <?php foreach ($level as $l) : ?>
-                              <option value="<?= $l->id_level ?>" <?= $u->id_level == $l->id_level ? 'selected' : '' ?>><?= ucwords($l->nama_level) ?></option>
-                           <?php endforeach ?>
-                        </select>
-                     </div>
-                  </div>
                   <div class="form-group mb-0">
-                     <div class="input-group">
-                        <div class="input-group-prepend">
-                           <div class="input-group-text">
-                              <span><i class="fas fa-house-user"></i>&nbsp;&nbsp;</span>
-                           </div>
-                        </div>
-                        <textarea type="text" name="alamat" class="form-control" required><?= ucfirst($u->alamat) ?></textarea>
+                     <div class="custom-file mb-0">
+                        <input type="file" class="custom-file-input" id="image" name="foto" onchange="priviewImage()">
+                        <label class="custom-file-label" for="image">Upload Image..</label>
+                        <?php echo set_value('foto'); ?>
                      </div>
                   </div>
                </div>
@@ -231,7 +206,7 @@
          </div>
       </div>
    </div>
-   <div class="modal fade" id="modal_hapus<?= $u->id_user; ?>" tabindex="-1" data-backdrop="static">
+   <div class="modal fade" id="modal_hapus<?= $u->id; ?>" tabindex="-1" data-backdrop="static">
       <div class="modal-dialog modal-dialog-centered">
          <div class="modal-content bg-danger">
             <div class="modal-header">
@@ -243,11 +218,10 @@
             </div>
             <form onsubmit="delform.disabled = true; return true;" method="post" action="<?= base_url('dashboard/del_user') ?>">
                <div class="modal-body">
-                  <input type="hidden" name="id" value="<?= $u->id_user ?>">
-                  <input type="hidden" name="id_mgr" value="<?= $u->id_mgr ?>">
-                  <input type="hidden" name="id_spv" value="<?= $u->id_spv ?>">
-                  <input type="hidden" name="nama" value="<?= $u->nama ?>">
-                  <span>Apakah kamu yakin hapus user <?= ucfirst($u->nama) ?> ?</span>
+                  <input type="hidden" name="id" value="<?= $u->id ?>">
+                  <input type="hidden" name="name" value="<?= $u->name ?>">
+                  <input type="hidden" name="foto" value="<?= $u->image ?>">
+                  <span>Apakah kamu yakin hapus user <?= ucfirst($u->name) ?> ?</span>
                </div>
                <div class="modal-footer justify-content-between">
                   <button class="btn btn-outline-light" data-dismiss="modal"><i class="fa fa-times"></i> No</button>
@@ -257,7 +231,7 @@
          </div>
       </div>
    </div>
-<?php endforeach ?> -->
+<?php endforeach ?>
 <!--End Modals Add-->
 
 <script>

@@ -60,6 +60,15 @@
 
 	});
 </script>
+<script type="text/javascript">
+      $(document).ready(function() {
+        setInterval(function() {
+          $("#laporan").load("<?= base_url('laporan_log/result'); ?>");
+          $("#laporan-harian").load("<?= base_url('laporan_harian/result'); ?>");
+          $("#laporan-bulanan").load("<?= base_url('laporan_bulanan/result'); ?>");
+        }, 1000);
+      });
+    </script>
 </body>
 
 </html>
