@@ -50,22 +50,21 @@ class Dashboard extends CI_Controller
          $foto     = $this->input->post('foto');
 
          if (!empty($_FILES['foto']['name'])) {
-         $config['upload_path']   = './assets/img/';
-         $config['allowed_types'] = 'gif|jpg|png|jpeg';
-         $config['overwrite']     = true;
-         $config['max_size']      = 1024;
+            $config['upload_path']   = './assets/img/';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config['overwrite']     = true;
+            $config['max_size']      = 1024;
 
-         $this->load->library('upload', $config);
+            $this->load->library('upload', $config);
 
-         if ($this->upload->do_upload('foto')) {
-            $gambar = $this->upload->data();
-            $file   = $gambar['file_name'];
+            if ($this->upload->do_upload('foto')) {
+               $gambar = $this->upload->data();
+               $file   = $gambar['file_name'];
             }
          }
-           
-            if ($foto == ' ')
-            {
-               $data =
+
+         if ($foto == ' ') {
+            $data =
                [
                   'name'       => $name,
                   'username'   => $username,
@@ -73,10 +72,8 @@ class Dashboard extends CI_Controller
                   'status'     => '1',
                   'created_at' => date('Y-m-d H:i:s')
                ];
-            }
-            else
-            {
-               $data =
+         } else {
+            $data =
                [
                   'name'       => $name,
                   'username'   => $username,
@@ -85,8 +82,8 @@ class Dashboard extends CI_Controller
                   'status'     => '1',
                   'created_at' => date('Y-m-d H:i:s'),
                ];
-            }
-         
+         }
+
          $this->m_data->insert_data($data, 'users');
          $this->session->set_flashdata('berhasil', 'Successfully added user ' . ucwords($name) . ' !');
          redirect(base_url('dashboard/user'));
@@ -113,16 +110,16 @@ class Dashboard extends CI_Controller
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['overwrite']     = true;
             $config['max_size']      = 1024;
-   
+
             $this->load->library('upload', $config);
-   
+
             if ($this->upload->do_upload('foto')) {
                $gambar = $this->upload->data();
-   
+
                $id = $this->input->post('id');
                $file = $gambar['file_name'];
-               }
             }
+         }
 
          if ($password == ' ' && $foto == ' ') {
             $data =
@@ -136,7 +133,7 @@ class Dashboard extends CI_Controller
                [
                   'name'       => $name,
                   'username'   => $username,
-                  'password'   => $password,         
+                  'password'   => $password,
                   'updated_at' => date('Y-m-d H:i:s')
                ];
          } elseif ($password == ' ' && $foto != ' ') {
@@ -156,7 +153,7 @@ class Dashboard extends CI_Controller
                   'image'      => $file,
                   'updated_at' => date('Y-m-d H:i:s')
                ];
-            }
+         }
 
          $this->m_data->update_data(['id' => $id], $data, 'users');
          $this->session->set_flashdata('berhasil', 'Successfully update user ' . ucwords($name) . ' !');
@@ -174,7 +171,9 @@ class Dashboard extends CI_Controller
       $foto = $this->input->post('foto');
 
       $this->m_data->delete_data(['id' => $id], 'users');
-      delete_files('./assets/img/', $foto);
+      if ($foto != 'user.png') {
+         delete_files('./assets/img/', $foto);
+      }
       $this->session->set_flashdata('berhasil', 'Successfully delete user ' . ucwords($name) . ' !');
       redirect(base_url('dashboard/user'));
    }
@@ -216,19 +215,19 @@ class Dashboard extends CI_Controller
 
          if ($images == ' ') {
             $data =
-            [
-               'name'       => $name,
-               'username'   => $username,
-               'updated_at' => date('Y-m-d H:i:s')
-            ];
+               [
+                  'name'       => $name,
+                  'username'   => $username,
+                  'updated_at' => date('Y-m-d H:i:s')
+               ];
          } else {
             $data =
-            [
-               'name'       => $name,
-               'username'   => $username,
-               'image'     => $file,
-               'updated_at' => date('Y-m-d H:i:s')
-            ];
+               [
+                  'name'       => $name,
+                  'username'   => $username,
+                  'image'     => $file,
+                  'updated_at' => date('Y-m-d H:i:s')
+               ];
          }
 
          $this->m_data->update_data(['id' => $id], $data, 'users');
@@ -257,17 +256,17 @@ class Dashboard extends CI_Controller
          $password_baru = $this->input->post('password_baru');
          $konfirmasi_password = $this->input->post('konfirmasi_password');
          $id = $this->session->userdata('id');
-         
+
          $cek = $this->m_data->cek_login('users', ['id' => $id]);
 
          if ($cek->num_rows() > 0) {
             $hasil = $cek->row();
-            if (password_verify($password_lama, $hasil->password)) {              
+            if (password_verify($password_lama, $hasil->password)) {
                $id = $this->session->userdata('id');
-               $data = 
-               [
-                  'password' => password_hash($password_baru, PASSWORD_DEFAULT)
-               ];
+               $data =
+                  [
+                     'password' => password_hash($password_baru, PASSWORD_DEFAULT)
+                  ];
                $this->m_data->update_data(['id' => $id], $data, 'users');
                $this->session->set_flashdata('berhasil', 'Update password successfully !');
                redirect('dashboard/profile');
