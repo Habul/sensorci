@@ -172,7 +172,7 @@ class Dashboard extends CI_Controller
 
       $this->m_data->delete_data(['id' => $id], 'users');
       if ($foto != 'user.png') {
-         delete_files('./assets/img/', $foto);
+         unlink(FCPATH . './assets/img/' . $foto);
       }
       $this->session->set_flashdata('berhasil', 'Successfully delete user ' . ucwords($name) . ' !');
       redirect(base_url('dashboard/user'));
@@ -225,7 +225,7 @@ class Dashboard extends CI_Controller
                [
                   'name'       => $name,
                   'username'   => $username,
-                  'image'     => $file,
+                  'image'      => $file,
                   'updated_at' => date('Y-m-d H:i:s')
                ];
          }

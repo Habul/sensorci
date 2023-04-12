@@ -59,17 +59,17 @@
                                     <span class='badge badge-success'>Aktif</span>
                                  <?php else : ?>
                                     <span class='badge badge-danger'>Non-Aktif</span>
-                                 <?php endif ?>                                 
+                                 <?php endif ?>
                               </td>
                               <td class="align-middle text-center">
                                  <?php if ($this->session->userdata('id') != $u->id) : ?>
-                                 <a class="btn btn-warning" data-toggle="modal" data-target="#modal_edit<?= $u->id; ?>" title="Edit">
-                                    <i class="fa fa-pencil-alt"></i></a>
-                                 <a class="btn btn-danger" data-toggle="modal" data-target="#modal_hapus<?= $u->id; ?>" title="Delete">
-                                    <i class="fa fa-trash"></i></a>
+                                    <a class="btn btn-warning" data-toggle="modal" data-target="#modal_edit<?= $u->id; ?>" title="Edit">
+                                       <i class="fa fa-pencil-alt"></i></a>
+                                    <a class="btn btn-danger" data-toggle="modal" data-target="#modal_hapus<?= $u->id; ?>" title="Delete">
+                                       <i class="fa fa-trash"></i></a>
                                  <?php else : ?>
                                     <button class="btn btn-danger" disabled title="Lock">
-                                    <i class="fa fa-lock"></i></button>
+                                       <i class="fa fa-lock"></i></button>
                                  <?php endif ?>
                               </td>
                            </tr>
