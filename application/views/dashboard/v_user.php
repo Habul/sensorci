@@ -48,7 +48,7 @@
                               <th width="10%"><i class="fas fa-cogs"></i></th>
                            </tr>
                         </thead>
-                        <?php foreach ($users as $u) {    ?>
+                        <?php foreach ($users as $u) {  ?>
                            <tr>
                               <td class="align-middle text-center"></td>
                               <td class="align-middle "><?= ucwords($u->name) ?></td>

@@ -35,11 +35,6 @@
 <script src="<?= base_url('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/jszip/jszip.min.js') ?>"></script>
-<script src="<?= base_url('assets/plugins/pdfmake/pdfmake.min.js') ?>"></script>
-<script src="<?= base_url('assets/plugins/pdfmake/vfs_fonts.js') ?>"></script>
-<script src="<?= base_url('assets/plugins/datatables-buttons/js/buttons.html5.min.js') ?>"></script>
-<script src="<?= base_url('assets/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
-<script src="<?= base_url('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/toastr/toastr.min.js') ?>"></script>
 <script src="<?= base_url('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') ?>"></script>
@@ -61,14 +56,14 @@
 	});
 </script>
 <script type="text/javascript">
-      $(document).ready(function() {
-        setInterval(function() {
-          $("#laporan").load("<?= base_url('laporan_log/result'); ?>");
-          $("#laporan-harian").load("<?= base_url('laporan_harian/result'); ?>");
-          $("#laporan-bulanan").load("<?= base_url('laporan_bulanan/result'); ?>");
-        }, 1000);
-      });
-    </script>
+	$(document).ready(function() {
+		setInterval(function() {
+			$("#laporan").load("<?= base_url('laporan_log/result'); ?>");
+			$("#laporan-harian").load("<?= base_url('laporan_harian/result'); ?>");
+			$("#laporan-bulanan").load("<?= base_url('laporan_bulanan/result'); ?>");
+		}, 1000);
+	});
+</script>
 </body>
 
 </html>

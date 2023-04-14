@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Dashboard extends CI_Controller
 {
    public function __construct()
@@ -166,7 +169,7 @@ class Dashboard extends CI_Controller
 
    public function del_user()
    {
-      $id = $this->input->post('id');
+      $id   = $this->input->post('id');
       $name = $this->input->post('name');
       $foto = $this->input->post('foto');
 
@@ -180,8 +183,8 @@ class Dashboard extends CI_Controller
 
    public function profile()
    {
-      $id = $this->session->userdata('id');
-      $data['title'] = 'Profile';
+      $id              = $this->session->userdata('id');
+      $data['title']   = 'Profile';
       $data['profile'] = $this->m_data->edit_data(['id' => $id], 'users')->result();
       $this->load->view('dashboard/v_header', $data);
       $this->load->view('dashboard/v_profile', $data);
@@ -283,9 +286,78 @@ class Dashboard extends CI_Controller
 
    public function report()
    {
-      $data['title'] = 'Report';
+      $data['title']              = 'Report';
+      $jumlah_data                = $this->m_data->get_count_all('tb_log');
+      $config['base_url']         = base_url('dashboard/report/');
+      $config['total_rows']       = $jumlah_data;
+      $config['per_page']         = 10;
+      $config['first_link']       = 'First';
+      $config['last_link']        = 'Last';
+      $config['next_link']        = 'Next';
+      $config['prev_link']        = 'Prev';
+      $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+      $config['full_tag_close']   = '</ul></nav></div>';
+      $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+      $config['num_tag_close']    = '</span></li>';
+      $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+      $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+      $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+      $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+      $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+      $config['prev_tagl_close']  = '</span>Next</li>';
+      $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+      $config['first_tagl_close'] = '</span></li>';
+      $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+      $config['last_tagl_close']  = '</span></li>';
+      $this->pagination->initialize($config);
+      $page                       = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+      $data['links']              = $this->pagination->create_links();
+      $data['report']             = $this->m_data->get_pagination($config["per_page"], $page, 'tanggal desc, waktu desc', 'tb_log');
       $this->load->view('dashboard/v_header', $data);
       $this->load->view('dashboard/v_report');
       $this->load->view('dashboard/v_footer');
+   }
+
+   public function export_excel()
+   {
+      $spreadsheet = new Spreadsheet();
+      $sheet = $spreadsheet->getActiveSheet();
+      $sheet->setCellValue('A1', 'No');
+      $sheet->setCellValue('B1', 'Suhu');
+      $sheet->setCellValue('C1', 'Kelembaban');
+      $sheet->setCellValue('D1', 'Tanggal');
+      $sheet->setCellValue('E1', 'Waktu');
+
+      $data = $this->m_data->get_limit('1000', 'tanggal desc,waktu desc', 'tb_log')->result();
+      $x = 2;
+      $no = 1;
+      foreach ($data as $row) {
+         $sheet->setCellValue('A' . $x, $no++);
+         $sheet->setCellValue('B' . $x, $row->suhu);
+         $sheet->setCellValue('C' . $x, $row->kelembaban);
+         $sheet->setCellValue('D' . $x, $row->tanggal);
+         $sheet->setCellValue('E' . $x, $row->waktu);
+         $x++;
+      }
+      $writer = new Xlsx($spreadsheet);
+      $filename = 'Log sensor';
+
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+      header('Cache-Control: max-age=0');
+
+      $writer->save('php://output');
+   }
+
+   public function export_pdf()
+   {
+      $this->load->library('pdf');
+      $file_pdf    = 'Log sensor';
+      $paper       = 'A4';
+      $orientation = "potrait";
+
+      $data['report'] = $this->m_data->get_limit('100', 'tanggal desc,waktu desc', 'tb_log')->result();
+      $html = $this->load->view('dashboard/v_pdf', $data, true);
+      $this->pdf->generate($html, $file_pdf, $paper, $orientation);
    }
 }

@@ -32,8 +32,8 @@
             </div>
           </div>
           <div class="d-flex justify-content-between">
-            <a class="btn btn-info col-5" href="#"><i class="fas fa-file-excel"></i> Export to excel</a>
-            <a class="btn btn-secondary col-5" href="#"><i class="fas fa-file-pdf"></i> Export to PDF</a>
+            <a class="btn btn-info col-5" href="<?= base_url('dashboard/export_excel') ?>"><i class="fas fa-file-excel"></i> Export to Excel</a>
+            <a class="btn btn-secondary col-5" href="<?= base_url('dashboard/export_pdf') ?>" target="_blank"><i class="fas fa-file-pdf"></i> Export to PDF</a>
           </div>
         </div>
         <div class="col-md-8">
@@ -47,10 +47,27 @@
                   <th scope="col">Waktu</th>
                 </tr>
               </thead>
-              <tbody id="laporan">
+              <tbody>
+                <?php
+
+                if ($this->uri->segment(3) == ' ') :
+                  $no = 1;
+                else :
+                  $no = $this->uri->segment(3) + 1;
+                endif;
+
+                foreach ($report as $row) : ?>
+                  <tr>
+                    <th scope="row"><?= $no++ ?></th>
+                    <td><?= $row->suhu ?></td>
+                    <td><?= $row->kelembaban ?></td>
+                    <td><?= $row->tanggal ?> <?= $row->waktu ?></td>
+                  </tr>
+                <?php endforeach; ?>
               </tbody>
             </table>
           </div>
+          <?= $links ?>
         </div>
       </div>
   </section>

@@ -20,6 +20,32 @@ class M_data extends CI_Model
       return $this->db->order_by($condition, $index)->get($table);
    }
 
+   function get_index2($table, $condition1)
+   {
+      return $this->db->order_by($condition1)->get($table);
+   }
+
+   public function get_count_all($table)
+   {
+      return $this->db->count_all($table);
+   }
+
+   public function get_pagination($limit, $start, $index, $table)
+   {
+      $this->db->limit($limit, $start);
+      $this->db->order_by($index);
+      $query = $this->db->get($table);
+
+      return $query->result();
+   }
+
+   public function get_limit($limit, $index, $table)
+   {
+      $this->db->order_by($index);
+      $this->db->limit($limit);
+      return $this->db->get($table);
+   }
+
    function insert_data($data, $table)
    {
       $this->db->insert($table, $data);
