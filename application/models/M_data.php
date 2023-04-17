@@ -56,6 +56,14 @@ class M_data extends CI_Model
       return $this->db->get_where($table, $where);
    }
 
+   function edit_data_row($where, $table, $select)
+   {
+      $this->db->select($select);
+      $this->db->from($table);
+      $this->db->where($where);
+      return $this->db->get();
+   }
+
    function edit_data_index($where, $table, $condition)
    {
       $this->db->select('*');

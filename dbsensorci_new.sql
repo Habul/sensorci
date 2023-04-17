@@ -24069,16 +24069,16 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT 'user.png',
   `status` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `craeted_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`name`,`username`,`password`,`image`,`status`,`craeted_at`,`updated_at`) values 
+insert  into `users`(`id`,`name`,`username`,`password`,`image`,`status`,`created_at`,`updated_at`) values 
 (1,'shihabul millah','habul','$2y$10$Uv.md0QxhmLu2FbPqJ9Y0eUavXQBSeaoag.JptLObfuI1HYClF5la','yoh.jpg','1','2022-07-30 22:43:01',NULL),
-(5,'admin','administrator','$2y$10$uJAIClY2Gml3EIH903IKxOFZZeCMeF7Xf65L/mnaX/iOIfctoiVHe','user.png','1','2022-10-29 22:20:45',NULL);
+(6,'Seful Sidik','Seful','$2y$10$8E.Rmqtbv2DpMJXGk72b.O3O2OMGiwPWO/LtN/tPVA23C9Xcog1Ma','1.jpg','1','2023-04-12 18:47:44','2023-04-15 09:39:50');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

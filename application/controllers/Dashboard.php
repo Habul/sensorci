@@ -50,42 +50,15 @@ class Dashboard extends CI_Controller
          $name     = $this->input->post('name');
          $username = $this->input->post('username');
          $password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
-         $foto     = $this->input->post('foto');
 
-         if (!empty($_FILES['foto']['name'])) {
-            $config['upload_path']   = './assets/img/';
-            $config['allowed_types'] = 'gif|jpg|png|jpeg';
-            $config['overwrite']     = true;
-            $config['max_size']      = 1024;
-
-            $this->load->library('upload', $config);
-
-            if ($this->upload->do_upload('foto')) {
-               $gambar = $this->upload->data();
-               $file   = $gambar['file_name'];
-            }
-         }
-
-         if ($foto == ' ') {
-            $data =
-               [
-                  'name'       => $name,
-                  'username'   => $username,
-                  'password'   => $password,
-                  'status'     => '1',
-                  'created_at' => date('Y-m-d H:i:s')
-               ];
-         } else {
-            $data =
-               [
-                  'name'       => $name,
-                  'username'   => $username,
-                  'password'   => $password,
-                  'image'      => $file,
-                  'status'     => '1',
-                  'created_at' => date('Y-m-d H:i:s'),
-               ];
-         }
+         $data =
+            [
+               'name'       => $name,
+               'username'   => $username,
+               'password'   => $password,
+               'status'     => '1',
+               'created_at' => date('Y-m-d H:i:s')
+            ];
 
          $this->m_data->insert_data($data, 'users');
          $this->session->set_flashdata('berhasil', 'Successfully added user ' . ucwords($name) . ' !');
@@ -105,46 +78,15 @@ class Dashboard extends CI_Controller
          $name     = $this->input->post('name');
          $username = $this->input->post('username');
          $password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
-         $foto     = $this->input->post('foto');
+         $status   = $this->input->post('status');
          $id       = $this->input->post('id');
 
-         if (!empty($_FILES['foto']['name'])) {
-            $config['upload_path']   = './assets/img/';
-            $config['allowed_types'] = 'gif|jpg|png|jpeg';
-            $config['overwrite']     = true;
-            $config['max_size']      = 1024;
-
-            $this->load->library('upload', $config);
-
-            if ($this->upload->do_upload('foto')) {
-               $gambar = $this->upload->data();
-
-               $id = $this->input->post('id');
-               $file = $gambar['file_name'];
-            }
-         }
-
-         if ($password == ' ' && $foto == ' ') {
+         if ($password == ' ') {
             $data =
                [
                   'name'       => $name,
                   'username'   => $username,
-                  'updated_at' => date('Y-m-d H:i:s')
-               ];
-         } elseif ($password != ' ' && $foto == ' ') {
-            $data =
-               [
-                  'name'       => $name,
-                  'username'   => $username,
-                  'password'   => $password,
-                  'updated_at' => date('Y-m-d H:i:s')
-               ];
-         } elseif ($password == ' ' && $foto != ' ') {
-            $data =
-               [
-                  'name'       => $name,
-                  'username'   => $username,
-                  'image'      => $file,
+                  'status'     => $status,
                   'updated_at' => date('Y-m-d H:i:s')
                ];
          } else {
@@ -153,7 +95,7 @@ class Dashboard extends CI_Controller
                   'name'       => $name,
                   'username'   => $username,
                   'password'   => $password,
-                  'image'      => $file,
+                  'status'     => $status,
                   'updated_at' => date('Y-m-d H:i:s')
                ];
          }

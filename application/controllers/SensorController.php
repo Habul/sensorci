@@ -7,9 +7,9 @@ class SensorController extends CI_Controller
 	{
 		parent::__construct();
 		date_default_timezone_set('Asia/Jakarta');
-		if ($this->session->userdata('status') != "iot_log") {
-			redirect(base_url() . 'login?alert=belum_login');
-		}
+		// if ($this->session->userdata('status') != "iot_log") {
+		// 	redirect(base_url() . 'login?alert=belum_login');
+		// }
 		$this->load->model('M_Sensor');
 	}
 
@@ -201,14 +201,17 @@ class SensorController extends CI_Controller
 
 		$this->load->view('realtime/arduino_dehumidifier', $DATA);
 	}
-	public function laporan_log_result()
-	{
-		$this->load->view('realtime/log-laporan');
-	}
+
+	// public function laporan_log_result()
+	// {
+	// 	$this->load->view('realtime/log-laporan');
+	// }
+
 	public function laporan_harian_result()
 	{
 		$this->load->view('realtime/log-laporan-harian');
 	}
+
 	public function laporan_bulanan_result()
 	{
 		$this->load->view('realtime/log-laporan-bulanan');

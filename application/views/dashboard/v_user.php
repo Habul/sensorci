@@ -127,14 +127,6 @@
                      <input id="password-field" type="password" class="form-control" name="password" placeholder="Input password .." required>
                   </div>
                </div>
-               <div class="form-group mb-0">
-                  <div class="custom-file mb-0">
-                     <input type="file" class="custom-file-input" id="image" name="foto" onchange="priviewImage()">
-                     <label class="custom-file-label" for="image">Upload Image..</label>
-                     <?php echo set_value('foto'); ?>
-                  </div>
-                  <img class="img-priview img-fluid col-sm-5 mb-1 mt-1">
-               </div>
             </div>
             <div class="modal-footer justify-content-center">
                <button class="btn btn-info col-6" id="addbtn"><i class="fa fa-check"></i> Save</button>
@@ -191,11 +183,22 @@
                      </div>
                      <small>Kosongkan jika tidak ingin mengubah password</small>
                   </div>
-                  <div class="form-group mb-0">
-                     <div class="custom-file mb-0">
-                        <input type="file" class="custom-file-input" id="image" name="foto" onchange="priviewImage()">
-                        <label class="custom-file-label" for="image">Upload Image..</label>
-                        <?php echo set_value('foto'); ?>
+                  <div class="form-group">
+                     <div class="input-group ">
+                        <div class="input-group-prepend">
+                           <div class="input-group-text pr-3">
+                              <span><i class="fas fa-exclamation-circle"></i></span>
+                           </div>
+                        </div>
+                        <select class="form-control" name="status">
+                           <option value="">- Pilih Status -</option>
+                           <option <?php if ($u->status == "1") {
+                                       echo "selected='selected'";
+                                    } ?> value="1">Aktif</option>
+                           <option <?php if ($u->status == "0") {
+                                       echo "selected='selected'";
+                                    } ?> value="0">Non-Aktif</option>
+                        </select>
                      </div>
                   </div>
                </div>
@@ -233,19 +236,3 @@
    </div>
 <?php endforeach ?>
 <!--End Modals Add-->
-
-<script>
-   function priviewImage() {
-      const image = document.querySelector('#image');
-      const imgPreview = document.querySelector('.img-priview');
-
-      imgPreview.style.display = 'block';
-
-      const oFReader = new FileReader();
-      oFReader.readAsDataURL(image.files[0]);
-
-      oFReader.onload = function(oFREvent) {
-         imgPreview.src = oFREvent.target.result;
-      }
-   }
-</script>

@@ -37,7 +37,7 @@ const long interval = 5000;
 const char* ssid = "DAFFA DENIS";
 const char* password = "11182230";
 
-const char* host = "192.168.100.43";  //IP Komputer / server
+const char* host = "iot.netizennetwork.id";  //IP Komputer / server
 
 void setup() {
   Serial.begin(9600);
@@ -66,7 +66,7 @@ void setup() {
 
 void loop() {
 
-  const int httpPort = 8080;
+  const int httpPort = 80;
   if (!wifiClient.connect(host, httpPort))
   {
     Serial.println("connection failed");
@@ -86,7 +86,7 @@ void loop() {
 
     String LinkOto;
     HTTPClient httpOto;
-    LinkOto = "http://" + String(host) + ":8080/sensorci/check/otomatis";
+    LinkOto = "http://" + String(host) + "/check/otomatis";
     httpOto.begin(wifiClient, LinkOto);
     httpOto.GET();
     String responseOto = httpOto.getString();
@@ -103,7 +103,7 @@ void loop() {
     {
       String LinkRelay;
       HTTPClient httpRelay;
-      LinkRelay = "http://" + String(host) + ":8080/sensorci/check/kipas";
+      LinkRelay = "http://" + String(host) + "/check/kipas";
       httpRelay.begin(wifiClient, LinkRelay);
       httpRelay.GET();
       String responseRelay = httpRelay.getString();
@@ -149,7 +149,7 @@ void loop() {
     {
       String LinkDehum;
       HTTPClient httpDehum;
-      LinkDehum = "http://" + String(host) + ":8080/sensorci/check/dehumidifier";
+      LinkDehum = "http://" + String(host) + "/check/dehumidifier";
       httpDehum.begin(wifiClient, LinkDehum);
       httpDehum.GET();
       String responseDehum = httpDehum.getString();
@@ -190,7 +190,7 @@ void loop() {
 
   String Link;
   HTTPClient http;
-  Link = "http://" + String(host) + ":8080/sensorci/update/" + String(t) + "/" + String(h);
+  Link = "http://" + String(host) + "/update/" + String(t) + "/" + String(h);
   http.begin(wifiClient, Link);
   http.GET();
   http.end();
