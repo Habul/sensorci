@@ -35,7 +35,7 @@
 				<div class="collapse navbar-collapse order-3" id="navbarCollapse">
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a href="<?= base_url('dashboard'); ?>" <?= $this->uri->uri_string() == 'dashboard'	? 'class="nav-link active"' : 'class="nav-link"' ?>>
+							<a href="<?= base_url('dashboard'); ?>" <?= $this->uri->uri_string() == 'dashboard' ? 'class="nav-link active"' : 'class="nav-link"' ?>>
 								<i class="fas fa-home"></i> Dashboard</a>
 						</li>
 						<li class="nav-item">

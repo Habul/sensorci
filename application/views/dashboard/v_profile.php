@@ -56,7 +56,7 @@
                                     </div>
                                  </div>
                                  <div class="form-group row">
-                                    <label for="inputEmail" class="col-sm-2 col-form-label">Email </label>
+                                    <label for="inputEmail" class="col-sm-2 col-form-label">Username </label>
                                     <div class="col-sm-10">
                                        <input type="text" name="username" id="inputEmail" class="form-control" value="<?= $p->username; ?>" required>
                                        <?= form_error('username'); ?>

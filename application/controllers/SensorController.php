@@ -165,8 +165,8 @@ class SensorController extends CI_Controller
                 [
                     'suhu' => $suhu,
                     'kelembaban' => $kelembaban,
-                    'kipas'	=> $kipas,
-                    'dehumidifier' =>	$dehumidifier
+                    'kipas'    => $kipas,
+                    'dehumidifier' =>    $dehumidifier
                 ];
         } else {
             $DataInsert =
@@ -180,8 +180,8 @@ class SensorController extends CI_Controller
         $DataInsert = array(
             'suhu' => $suhu,
             'kelembaban' => $kelembaban,
-            'tanggal'	=> date('Y-m-d'),
-            'waktu'	=> date('H:i:s')
+            'tanggal'    => date('Y-m-d'),
+            'waktu'    => date('H:i:s')
         );
 
         $this->M_Sensor->InsertDataSensorLog($DataInsert);

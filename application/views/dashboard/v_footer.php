@@ -64,6 +64,17 @@
 		}, 1000);
 	});
 </script>
+<script>
+	$("#example1").DataTable({
+         "responsive": true,
+         "lengthChange": false,
+         "autoWidth": false,
+         "searching": false,
+         "order": [],
+         "paging": false,
+         "info": false,
+      });
+</script>
 </body>
 
 </html>

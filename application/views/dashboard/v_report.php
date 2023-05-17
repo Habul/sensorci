@@ -38,25 +38,24 @@
         </div>
         <div class="col-md-8">
           <div class="card">
-            <table class="table">
+            <table class="table table-hover" id="example1">
               <thead class="thead-light">
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Suhu</th>
-                  <th scope="col">Kelembaban</th>
-                  <th scope="col">Waktu</th>
+                  <th>#</th>
+                  <th>Suhu</th>
+                  <th>Kelembaban</th>
+                  <th>Waktu</th>
                 </tr>
               </thead>
-              <tbody>
                 <?php
 
                 if ($this->uri->segment(3) == ' ') :
-                  $no = 1;
+                    $no = 1;
                 else :
-                  $no = $this->uri->segment(3) + 1;
+                    $no = $this->uri->segment(3) + 1;
                 endif;
 
-                foreach ($report as $row) : ?>
+            foreach ($report as $row) : ?>
                   <tr>
                     <th scope="row"><?= $no++ ?></th>
                     <td><?= $row->suhu ?></td>
@@ -64,7 +63,6 @@
                     <td><?= $row->tanggal ?> <?= $row->waktu ?></td>
                   </tr>
                 <?php endforeach; ?>
-              </tbody>
             </table>
           </div>
           <?= $links ?>
