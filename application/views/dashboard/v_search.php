@@ -39,11 +39,11 @@
               <div class="form-row">
                 <div class="col-md-6 mb-3">
                   <label>Start</label>
-                  <input type="date" class="form-control" name="period_awal" required>
+                  <input type="date" class="form-control" name="period_awal" value="<?= $period_awal ?>" required>
                 </div>
                 <div class="col-md-6 mb-3">
                   <label>End</label>
-                  <input type="date" class="form-control" name="period_akhir" required>
+                  <input type="date" class="form-control" name="period_akhir" value="<?= $period_akhir ?>" required>
                 </div>
               </div>
               <div class="d-flex justify-content-center">
@@ -65,12 +65,47 @@
             </div>
           </div>
         </div>
-
-      </div>
-
-      <div class="row">
-
-
+        <div class="col-md-8">
+          <div class="d-flex justify-content-between mb-2">
+            <?= form_open('dashboard/export_excel') ?>
+            <input type="hidden" value="<?= $period_awal ?>" name="awal">
+            <input type="hidden" value="<?= $period_akhir ?>" name="akhir">
+            <button class="btn btn-info shadow-sm" type="submit"><i class="fas fa-file-excel"></i> Export to Excel</button>
+            <?= form_close() ?>
+            <?= form_open('dashboard/export_pdf') ?>
+            <input type="hidden" value="<?= $period_awal ?>" name="awal">
+            <input type="hidden" value="<?= $period_akhir ?>" name="akhir">
+            <button class="btn btn-secondary shadow-sm" formtarget="_blank"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+            <?= form_close() ?>
+          </div>
+          <div class="card">
+            <table class="table table-hover" id="example1">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Suhu</th>
+                  <th>Kelembaban</th>
+                  <th>Waktu</th>
+                </tr>
+              </thead>
+              <?php
+              if ($this->uri->segment(3) == ' ') :
+                $no = 1;
+              else :
+                $no = $this->uri->segment(3) + 1;
+              endif;
+              foreach ($report as $row) : ?>
+                <tr>
+                  <th scope="row"><?= $no++ ?></th>
+                  <td><?= $row->suhu ?></td>
+                  <td><?= $row->kelembaban ?></td>
+                  <td><?= $row->tanggal ?> <?= $row->waktu ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </table>
+          </div>
+          <?= $links ?>
+        </div>
       </div>
   </section>
 </div>

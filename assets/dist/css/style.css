@@ -4,7 +4,7 @@
 }
 
 .bg-image {
-	background-image: url('http://localhost:8080/sensorci/assets/img/iotneww.png');
+	background-image: url('http://localhost/sensorci/assets/img/iotneww.png');
 	/* background-image: url('https://bootstrapious.com/i/snippets/sn-page-split/bg.jpgk'); */
 	background-size: cover;
 	background-position: center center;

@@ -45,7 +45,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="<?= base_url('dashboard/report'); ?>" <?= $this->uri->uri_string() == 'dashboard/report' ? 'class="nav-link active"' : 'class="nav-link"' ?>>
+							<a href="<?= base_url('dashboard/report'); ?>" <?= $this->uri->segment(2) == 'report' || $this->uri->segment(2) == 'search' ? 'class="nav-link active"' : 'class="nav-link"' ?>>
 								<i class="fas fa-file-invoice"></i>
 								Report
 							</a>

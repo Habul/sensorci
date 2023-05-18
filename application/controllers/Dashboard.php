@@ -2,6 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use FontLib\Table\Type\post;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -226,8 +227,44 @@ class Dashboard extends CI_Controller
 
     public function report()
     {
+        // $data['title']              = 'Report';
+        // $jumlah_data                = $this->m_data->get_count_all('tb_log');
+        // $config['base_url']         = base_url('dashboard/report/');
+        // $config['total_rows']       = $jumlah_data;
+        // $config['per_page']         = 10;
+        // $config['first_link']       = 'First';
+        // $config['last_link']        = 'Last';
+        // $config['next_link']        = 'Next';
+        // $config['prev_link']        = 'Prev';
+        // $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+        // $config['full_tag_close']   = '</ul></nav></div>';
+        // $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
+        // $config['num_tag_close']    = '</span></li>';
+        // $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
+        // $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
+        // $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
+        // $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        // $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
+        // $config['prev_tagl_close']  = '</span>Next</li>';
+        // $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
+        // $config['first_tagl_close'] = '</span></li>';
+        // $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
+        // $config['last_tagl_close']  = '</span></li>';
+        // $this->pagination->initialize($config);
+        // $page                       = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        // $data['links']              = $this->pagination->create_links();
+        // $data['report']             = $this->m_data->get_pagination($config["per_page"], $page, 'tanggal desc, waktu desc', 'tb_log');
+        $this->load->view('dashboard/v_header');
+        $this->load->view('dashboard/v_report');
+        $this->load->view('dashboard/v_footer');
+    }
+
+    public function search()
+    {
         $data['title']              = 'Report';
-        $jumlah_data                = $this->m_data->get_count_all('tb_log');
+        $awal                       = $this->input->post('period_awal');
+        $akhir                      = $this->input->post('period_akhir');
+        $jumlah_data                = $this->m_data->get_count($awal, $akhir, 'tb_log')->num_rows();
         $config['base_url']         = base_url('dashboard/report/');
         $config['total_rows']       = $jumlah_data;
         $config['per_page']         = 10;
@@ -252,14 +289,18 @@ class Dashboard extends CI_Controller
         $this->pagination->initialize($config);
         $page                       = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['links']              = $this->pagination->create_links();
-        $data['report']             = $this->m_data->get_pagination($config["per_page"], $page, 'tanggal desc, waktu desc', 'tb_log');
+        $data['report']             = $this->m_data->get_pagination_search($config["per_page"], $page, $awal, $akhir, 'tanggal desc, waktu desc', 'tb_log');
+        $data['period_awal']        = $awal;
+        $data['period_akhir']       = $akhir;
         $this->load->view('dashboard/v_header', $data);
-        $this->load->view('dashboard/v_report', $data);
+        $this->load->view('dashboard/v_search', $data);
         $this->load->view('dashboard/v_footer');
     }
 
     public function export_excel()
     {
+        $awal = $this->input->post('awal');
+        $akhir = $this->input->post('akhir');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'No');
@@ -268,7 +309,7 @@ class Dashboard extends CI_Controller
         $sheet->setCellValue('D1', 'Tanggal');
         $sheet->setCellValue('E1', 'Waktu');
 
-        $data = $this->m_data->get_limit('1000', 'tanggal desc,waktu desc', 'tb_log')->result();
+        $data = $this->m_data->get_count($awal, $akhir, 'tb_log')->result();
         $x = 2;
         $no = 1;
         foreach ($data as $row) {
@@ -291,12 +332,14 @@ class Dashboard extends CI_Controller
 
     public function export_pdf()
     {
+        $awal = $this->input->post('awal');
+        $akhir = $this->input->post('akhir');
         $this->load->library('pdf');
         $file_pdf    = 'Log sensor';
         $paper       = 'A4';
         $orientation = "potrait";
 
-        $data['report'] = $this->m_data->get_limit('100', 'tanggal desc,waktu desc', 'tb_log')->result();
+        $data['report'] = $this->m_data->get_count($awal, $akhir, 'tb_log')->result();
         $html = $this->load->view('dashboard/v_pdf', $data, true);
         $this->pdf->generate($html, $file_pdf, $paper, $orientation);
     }

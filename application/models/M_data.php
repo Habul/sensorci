@@ -30,9 +30,25 @@ class M_data extends CI_Model
       return $this->db->count_all($table);
    }
 
+   public function get_count($minvalue, $maxvalue, $table)
+   {
+      $this->db->where("tanggal BETWEEN '$minvalue' AND '$maxvalue'");
+      return $this->db->get($table);
+   }
+
    public function get_pagination($limit, $start, $index, $table)
    {
       $this->db->limit($limit, $start);
+      $this->db->order_by($index);
+      $query = $this->db->get($table);
+
+      return $query->result();
+   }
+
+   public function get_pagination_search($limit, $start, $minvalue, $maxvalue, $index, $table)
+   {
+      $this->db->limit($limit, $start);
+      $this->db->where("tanggal BETWEEN '$minvalue' AND '$maxvalue'");
       $this->db->order_by($index);
       $query = $this->db->get($table);
 
