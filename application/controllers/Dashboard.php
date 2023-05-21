@@ -227,34 +227,8 @@ class Dashboard extends CI_Controller
 
     public function report()
     {
-        // $data['title']              = 'Report';
-        // $jumlah_data                = $this->m_data->get_count_all('tb_log');
-        // $config['base_url']         = base_url('dashboard/report/');
-        // $config['total_rows']       = $jumlah_data;
-        // $config['per_page']         = 10;
-        // $config['first_link']       = 'First';
-        // $config['last_link']        = 'Last';
-        // $config['next_link']        = 'Next';
-        // $config['prev_link']        = 'Prev';
-        // $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
-        // $config['full_tag_close']   = '</ul></nav></div>';
-        // $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
-        // $config['num_tag_close']    = '</span></li>';
-        // $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
-        // $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
-        // $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
-        // $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
-        // $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
-        // $config['prev_tagl_close']  = '</span>Next</li>';
-        // $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
-        // $config['first_tagl_close'] = '</span></li>';
-        // $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
-        // $config['last_tagl_close']  = '</span></li>';
-        // $this->pagination->initialize($config);
-        // $page                       = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        // $data['links']              = $this->pagination->create_links();
-        // $data['report']             = $this->m_data->get_pagination($config["per_page"], $page, 'tanggal desc, waktu desc', 'tb_log');
-        $this->load->view('dashboard/v_header');
+        $data['title'] = 'Report';
+        $this->load->view('dashboard/v_header', $data);
         $this->load->view('dashboard/v_report');
         $this->load->view('dashboard/v_footer');
     }
@@ -262,36 +236,55 @@ class Dashboard extends CI_Controller
     public function search()
     {
         $data['title']              = 'Report';
-        $awal                       = $this->input->post('period_awal');
-        $akhir                      = $this->input->post('period_akhir');
-        $jumlah_data                = $this->m_data->get_count($awal, $akhir, 'tb_log')->num_rows();
-        $config['base_url']         = base_url('dashboard/report/');
-        $config['total_rows']       = $jumlah_data;
-        $config['per_page']         = 10;
-        $config['first_link']       = 'First';
-        $config['last_link']        = 'Last';
-        $config['next_link']        = 'Next';
-        $config['prev_link']        = 'Prev';
-        $config['full_tag_open']    = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
-        $config['full_tag_close']   = '</ul></nav></div>';
-        $config['num_tag_open']     = '<li class="page-item"><span class="page-link">';
-        $config['num_tag_close']    = '</span></li>';
-        $config['cur_tag_open']     = '<li class="page-item active"><span class="page-link">';
-        $config['cur_tag_close']    = '<span class="sr-only">(current)</span></span></li>';
-        $config['next_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['next_tagl_close']  = '<span aria-hidden="true">&raquo;</span></span></li>';
-        $config['prev_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['prev_tagl_close']  = '</span>Next</li>';
-        $config['first_tag_open']   = '<li class="page-item"><span class="page-link">';
-        $config['first_tagl_close'] = '</span></li>';
-        $config['last_tag_open']    = '<li class="page-item"><span class="page-link">';
-        $config['last_tagl_close']  = '</span></li>';
+        $awal                       = htmlentities((trim($this->input->get('period_awal', true))) ? trim($this->input->get('period_awal', true)) : '');
+        $akhir                      = htmlentities((trim($this->input->get('period_akhir', true))) ? trim($this->input->get('period_akhir', true)) : '');
+
+        $perPage                    = 10;
+        $page                       = 0;
+
+        if ($this->input->get('page')) {
+            $page = $this->input->get('page');
+        }
+
+        $start_index = 0;
+        if ($page != 0) {
+            $start_index = $perPage * ($page - 1);
+        }
+
+        $jumlah_data                    = $this->m_data->get_count($awal, $akhir, 'tb_log')->num_rows();
+        $config['base_url']             = site_url('dashboard/search/');
+        $config['total_rows']           = $jumlah_data;
+        $config['per_page']             = $perPage;
+        $config['enable_query_strings'] = true;
+        $config['use_page_numbers']     = true;
+        $config['page_query_string']    = true;
+        $config['query_string_segment'] = 'page';
+        $config['reuse_query_string']   = true;
+        $config['first_link']           = 'First';
+        $config['last_link']            = 'Last';
+        $config['next_link']            = 'Next';
+        $config['prev_link']            = 'Prev';
+        $config['full_tag_open']        = '<div class="pagging text-center"><nav><ul class="pagination justify-content-center">';
+        $config['full_tag_close']       = '</ul></nav></div>';
+        $config['num_tag_open']         = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close']        = '</span></li>';
+        $config['cur_tag_open']         = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close']        = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open']        = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close']      = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open']        = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close']      = '</span>Next</li>';
+        $config['first_tag_open']       = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close']     = '</span></li>';
+        $config['last_tag_open']        = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close']      = '</span></li>';
         $this->pagination->initialize($config);
-        $page                       = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['links']              = $this->pagination->create_links();
-        $data['report']             = $this->m_data->get_pagination_search($config["per_page"], $page, $awal, $akhir, 'tanggal desc, waktu desc', 'tb_log');
-        $data['period_awal']        = $awal;
-        $data['period_akhir']       = $akhir;
+        $data['page']                   = $page;
+        $data['links']                  = $this->pagination->create_links();
+        $data['report']                 = $this->m_data->get_pagination_search($config["per_page"], $start_index, $awal, $akhir, 'tanggal desc, waktu desc', 'tb_log');
+        $data['period_awal']            = $awal;
+        $data['period_akhir']           = $akhir;
+        $data['number']                 = $start_index + 1;
         $this->load->view('dashboard/v_header', $data);
         $this->load->view('dashboard/v_search', $data);
         $this->load->view('dashboard/v_footer');
@@ -299,8 +292,8 @@ class Dashboard extends CI_Controller
 
     public function export_excel()
     {
-        $awal = $this->input->post('awal');
-        $akhir = $this->input->post('akhir');
+        $awal = $this->input->get('awal');
+        $akhir = $this->input->get('akhir');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'No');
@@ -332,8 +325,8 @@ class Dashboard extends CI_Controller
 
     public function export_pdf()
     {
-        $awal = $this->input->post('awal');
-        $akhir = $this->input->post('akhir');
+        $awal = $this->input->get('awal');
+        $akhir = $this->input->get('akhir');
         $this->load->library('pdf');
         $file_pdf    = 'Log sensor';
         $paper       = 'A4';

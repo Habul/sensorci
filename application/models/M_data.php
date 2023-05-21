@@ -55,6 +55,25 @@ class M_data extends CI_Model
       return $query->result();
    }
 
+   function getpaginationsearch($perPage, $start_index, $minvalue = null, $maxvalue = null,  $is_count = 0)
+   {
+      if ($perPage != '' && $start_index != '') {
+         $this->db->limit($perPage, $start_index);
+      }
+
+      if ($minvalue != null && $maxvalue != null) {
+         $this->db->where("tanggal BETWEEN '$minvalue' AND '$maxvalue'");
+      }
+
+      if ($is_count == 1) {
+         $query = $this->db->get('tb_log');
+         return $query->num_rows();
+      } else {
+         $query = $this->db->get('tb_log');
+         return $query->result_array();
+      }
+   }
+
    public function get_limit($limit, $index, $table)
    {
       $this->db->order_by($index);

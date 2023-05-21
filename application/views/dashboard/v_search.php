@@ -35,21 +35,21 @@
               </div>
             </div>
             <div class="card-body">
-              <?= form_open('dashboard/search') ?>
-              <div class="form-row">
-                <div class="col-md-6 mb-3">
-                  <label>Start</label>
-                  <input type="date" class="form-control" name="period_awal" value="<?= $period_awal ?>" required>
+              <form action="<?= base_url('dashboard/search') ?>" method="get">
+                <div class="form-row">
+                  <div class="col-md-6 mb-3">
+                    <label>Start</label>
+                    <input type="date" class="form-control" name="period_awal" value="<?= $period_awal ?>" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label>End</label>
+                    <input type="date" class="form-control" name="period_akhir" value="<?= $period_akhir ?>" required>
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label>End</label>
-                  <input type="date" class="form-control" name="period_akhir" value="<?= $period_akhir ?>" required>
+                <div class="d-flex justify-content-center">
+                  <button class="btn btn-outline-info col-6" type="submit"><i class="fas fa-search"></i> Priview</button>
                 </div>
-              </div>
-              <div class="d-flex justify-content-center">
-                <button class="btn btn-outline-info col-6" type="submit"><i class="fas fa-search"></i> Priview</button>
-              </div>
-              <?= form_close() ?>
+              </form>
             </div>
           </div>
           <div class="card shadow-0 border mb-2">
@@ -67,16 +67,16 @@
         </div>
         <div class="col-md-8">
           <div class="d-flex justify-content-between mb-2">
-            <?= form_open('dashboard/export_excel') ?>
-            <input type="hidden" value="<?= $period_awal ?>" name="awal">
-            <input type="hidden" value="<?= $period_akhir ?>" name="akhir">
-            <button class="btn btn-info shadow-sm" type="submit"><i class="fas fa-file-excel"></i> Export to Excel</button>
-            <?= form_close() ?>
-            <?= form_open('dashboard/export_pdf') ?>
-            <input type="hidden" value="<?= $period_awal ?>" name="awal">
-            <input type="hidden" value="<?= $period_akhir ?>" name="akhir">
-            <button class="btn btn-secondary shadow-sm" formtarget="_blank"><i class="fas fa-file-pdf"></i> Export to PDF</button>
-            <?= form_close() ?>
+            <form action="<?= base_url('dashboard/export_excel') ?>" method="get">
+              <input type="hidden" value="<?= $period_awal ?>" name="awal">
+              <input type="hidden" value="<?= $period_akhir ?>" name="akhir">
+              <button class="btn btn-info shadow-sm" type="submit"><i class="fas fa-file-excel"></i> Export to Excel</button>
+            </form>
+            <form action="<?= base_url('dashboard/export_pdf') ?>" method="get">
+              <input type="hidden" value="<?= $period_awal ?>" name="awal">
+              <input type="hidden" value="<?= $period_akhir ?>" name="akhir">
+              <button class="btn btn-secondary shadow-sm" formtarget="_blank"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+            </form>
           </div>
           <div class="card">
             <table class="table table-hover" id="example1">
@@ -89,11 +89,7 @@
                 </tr>
               </thead>
               <?php
-              if ($this->uri->segment(3) == ' ') :
-                $no = 1;
-              else :
-                $no = $this->uri->segment(3) + 1;
-              endif;
+              $no = $number;
               foreach ($report as $row) : ?>
                 <tr>
                   <th scope="row"><?= $no++ ?></th>
